@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PINO is an AI-assisted tool for creating short-form videos and publishing each video to TikTok only after explicit owner approval.">
+  <title>PINO — AI-assisted video creation with human approval</title>
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0e14;
+      --surface: #121722;
+      --surface-soft: #171e2b;
+      --text: #f5f7fb;
+      --muted: #aab4c4;
+      --accent: #dc325a;
+      --accent-soft: rgba(220, 50, 90, 0.11);
+      --border: rgba(255, 255, 255, 0.11);
+      --max: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 82% 8%, rgba(220, 50, 90, 0.12), transparent 28rem),
+        var(--bg);
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(calc(100% - 40px), var(--max));
+      margin-inline: auto;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding-block: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+    }
+
+    nav { display: flex; gap: 20px; }
+
+    nav a,
+    footer a {
+      color: var(--muted);
+      font-size: 0.94rem;
+      text-underline-offset: 4px;
+    }
+
+    nav a:hover,
+    footer a:hover { color: var(--accent); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      align-items: center;
+      gap: clamp(40px, 8vw, 100px);
+      min-height: 620px;
+      padding-block: 72px 96px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 6.6rem);
+      line-height: 0.97;
+      letter-spacing: -0.065em;
+    }
+
+    .lead {
+      max-width: 700px;
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.3rem);
+    }
+
+    .approval-card {
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      background: linear-gradient(145deg, var(--surface-soft), var(--surface));
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+    }
+
+    .approval-icon {
+      display: grid;
+      width: 56px;
+      height: 56px;
+      margin-bottom: 26px;
+      border-radius: 50%;
+      color: #071413;
+      background: var(--accent);
+      place-items: center;
+      font-size: 1.7rem;
+      font-weight: 900;
+    }
+
+    .approval-card h2 { margin: 0 0 10px; font-size: 1.45rem; }
+    .approval-card p { margin: 0; color: var(--muted); }
+
+    section { padding-block: 88px; border-top: 1px solid var(--border); }
+
+    .section-heading {
+      max-width: 680px;
+      margin-bottom: 42px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+    }
+
+    .section-heading p { margin: 0; color: var(--muted); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps li {
+      min-height: 210px;
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+      counter-increment: step;
+    }
+
+    .steps li::before {
+      display: block;
+      margin-bottom: 34px;
+      color: var(--accent);
+      content: "0" counter(step);
+      font-weight: 800;
+    }
+
+    .steps h3 { margin: 0 0 8px; font-size: 1.08rem; }
+    .steps p { margin: 0; color: var(--muted); font-size: 0.96rem; }
+
+    .principle {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 60px;
+      align-items: start;
+      padding: clamp(30px, 6vw, 64px);
+      border: 1px solid rgba(220, 50, 90, 0.25);
+      border-radius: 28px;
+      background: var(--accent-soft);
+    }
+
+    .principle p { margin: 0; color: #d3dcE8; font-size: 1.06rem; }
+
+    .legal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .legal-card {
+      display: block;
+      min-height: 180px;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+      text-decoration: none;
+      transition: transform 160ms ease, border-color 160ms ease;
+    }
+
+    .legal-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+    .legal-card strong { display: block; margin-bottom: 12px; font-size: 1.25rem; }
+    .legal-card span { color: var(--muted); }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      padding-block: 34px 48px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    footer p { margin: 0; }
+
+    @media (max-width: 760px) {
+      header { align-items: flex-start; }
+      nav { flex-direction: column; gap: 5px; text-align: right; }
+      .hero { grid-template-columns: 1fr; min-height: auto; padding-block: 58px 72px; }
+      .steps, .legal-grid, .principle { grid-template-columns: 1fr; }
+      .principle { gap: 18px; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="index.html" aria-label="PINO home">
+      <img src="favicon.svg" alt="" width="36" height="36">
+      <span>PINO</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#how-it-works">How it works</a>
+      <a href="#approval">Human approval</a>
+      <a href="#legal">Legal</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero wrap">
+      <div>
+        <p class="eyebrow">AI-assisted short-form video</p>
+        <h1>Create with AI. Publish with intent.</h1>
+        <p class="lead">PINO is an automated content-production tool that helps an account owner create short videos — including a script, narration, visuals, and captions — and publish them to their own TikTok account.</p>
+      </div>
+      <aside class="approval-card" aria-label="Publishing safeguard">
+        <div class="approval-icon" aria-hidden="true">✓</div>
+        <h2>The owner stays in control</h2>
+        <p>Every individual video must be reviewed and explicitly approved by the TikTok account owner inside PINO before it can be published.</p>
+      </aside>
+    </div>
+
+    <section id="how-it-works">
+      <div class="wrap">
+        <div class="section-heading">
+          <p class="eyebrow">What PINO does</p>
+          <h2>A clear path from idea to approved post</h2>
+          <p>AI assists with production while the account owner makes the final publishing decision.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <h3>Generate</h3>
+            <p>PINO creates a draft short-form video using AI-assisted scripting, narration, visuals, and captions.</p>
+          </li>
+          <li>
+            <h3>Review and approve</h3>
+            <p>The account owner reviews that specific video inside the application and chooses whether to approve it.</p>
+          </li>
+          <li>
+            <h3>Publish</h3>
+            <p>Only after approval, PINO uses TikTok's official Content Posting API to publish to the owner's authorized account.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="approval">
+      <div class="wrap principle">
+        <div>
+          <p class="eyebrow">Human approval</p>
+          <h2>No unreviewed automatic posting</h2>
+        </div>
+        <p>Connecting a TikTok account does not give PINO permission to publish every generated draft. Approval is requested per video. If the owner does not explicitly approve a video, PINO does not publish it. The owner may also revoke the application's TikTok access through their TikTok account settings.</p>
+      </div>
+    </section>
+
+    <section id="legal">
+      <div class="wrap">
+        <div class="section-heading">
+          <p class="eyebrow">Policies</p>
+          <h2>Legal information</h2>
+          <p>Read how PINO is intended to be used and how authorized account data is handled.</p>
+        </div>
+        <div class="legal-grid">
+          <a class="legal-card" href="terms.html">
+            <strong>Terms of Service →</strong>
+            <span>Usage, authorization, account control, and content responsibilities.</span>
+          </a>
+          <a class="legal-card" href="privacy.html">
+            <strong>Privacy Policy →</strong>
+            <span>What PINO accesses, why it is needed, and how it is stored.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <p>© 2026 PINO. AI-assisted creation with human-controlled publishing.</p>
+    <p>Contact the developer via the contact information provided in the TikTok Developer Portal application.</p>
+  </footer>
+</body>
+</html>
